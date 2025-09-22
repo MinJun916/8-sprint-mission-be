@@ -4,18 +4,44 @@ export const getAllProducts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.q;
 
     const validPage = Math.max(1, page);
 
     const offset = (validPage - 1) * limit;
 
-    const totalCount = await prisma.product.count();
+    // 검색 조건 구성
+    const whereCondition = searchQuery
+      ? {
+          OR: [
+            {
+              name: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        }
+      : {};
+
+    const totalCount = await prisma.product.count({
+      where: whereCondition,
+    });
 
     const products = await prisma.product.findMany({
+      where: whereCondition,
       select: {
         id: true,
         name: true,
+        description: true,
         price: true,
+        tags: true,
         createdAt: true,
       },
       skip: offset,
@@ -40,6 +66,10 @@ export const getAllProducts = async (req, res, next) => {
         limit,
         hasNextPage,
         hasPrevPage,
+      },
+      search: {
+        query: searchQuery || null,
+        hasSearch: !!searchQuery,
       },
     });
   } catch (error) {
@@ -103,12 +133,44 @@ export const updateProduct = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Id is required' });
     }
 
+    // 업데이트할 데이터 구성 (undefined인 필드는 제외)
+    const updateData = {};
+    if (name !== undefined) updateData.name = name.trim();
+    if (description !== undefined) updateData.description = description.trim();
+    if (price !== undefined) updateData.price = price;
+    if (tags !== undefined) updateData.tags = tags;
+
+    // 업데이트할 데이터가 없는 경우
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'At least one field (name, description, price, tags) must be provided',
+      });
+    }
+
     const product = await prisma.product.update({
       where: { id },
-      data: { name: name.trim(), description: description.trim(), price, tags },
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        tags: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
+
     res.status(200).json({ success: true, data: product });
   } catch (error) {
+    // Prisma 에러 처리
+    if (error.code === 'P2025') {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
     next(error);
   }
 };
