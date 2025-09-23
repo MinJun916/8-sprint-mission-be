@@ -1,6 +1,6 @@
 # 8-Sprint-Mission-7
 
-## 이번 미션 소개
+## 미션 소개
 
 ### 📂 자유게시판 (Article)
 
