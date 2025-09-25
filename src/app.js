@@ -27,6 +27,31 @@ app.use(express.json());
 // Morgan 로깅
 app.use(morgan('combined'));
 
+// src/app.js (라우터들 위 어디든)
+import dns from 'node:dns';
+import net from 'node:net';
+
+app.get('/__debug/db-socket', (_req, res) => {
+  try {
+    const u = new URL(process.env.DATABASE_URL);
+    const host = u.hostname; // ← 여기선 포트 빠진 hostname만
+    const port = Number(u.port); // 6543
+
+    dns.lookup(host, (err, addr) => {
+      if (err) return res.status(500).json({ step: 'dns.lookup', error: err.message, host, port });
+      const socket = net.connect({ host, port }, () => {
+        socket.destroy();
+        res.json({ ok: true, host, ip: addr, port });
+      });
+      socket.on('error', (e) =>
+        res.status(500).json({ step: 'net.connect', error: e.message, host, port }),
+      );
+    });
+  } catch (e) {
+    res.status(500).json({ step: 'parse', error: e.message });
+  }
+});
+
 // 라우터 설정
 app.use('/products', productRoutes);
 app.use('/articles', articleRoutes);
