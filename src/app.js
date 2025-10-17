@@ -5,7 +5,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import morgan from 'morgan';
 import helmet from 'helmet';
-
+import passport from './config/passport.js';
 // Swagger Setting
 import { specs, swaggerUiOptions } from './swaggerOptions.js';
 
@@ -24,6 +24,7 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(passport.initialize());
 
 // Morgan 로깅
 app.use(morgan('combined'));
