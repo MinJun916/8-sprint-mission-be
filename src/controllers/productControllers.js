@@ -53,9 +53,32 @@ export const createProduct = async (req, res, next) => {
 export const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const me = req.user;
 
     const product = await productRepository.getProductById(id);
-    res.status(200).json({ success: true, data: product });
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    const myLike = await productRepository.getMyLike(me.id, id);
+    const isLiked = Boolean(myLike);
+
+    const response = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      tags: product.tags,
+      image: product.image,
+      owner: product.owner,
+      comments: product.comments,
+      isLiked,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+    };
+
+    res.status(200).json({ success: true, data: response });
   } catch (error) {
     next(error);
   }

@@ -25,7 +25,12 @@ router.post(
   upload.single('image'),
   createProduct,
 );
-router.get('/:id', validateProductId, getProductById);
+router.get(
+  '/:id',
+  passport.authenticate('access-token', { session: false }),
+  validateProductId,
+  getProductById,
+);
 router.patch('/:id', validateProductId, validateUpdateProduct, updateProduct);
 router.delete('/:id', validateProductId, deleteProduct);
 

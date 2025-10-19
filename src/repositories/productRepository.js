@@ -86,17 +86,22 @@ export const createProduct = async (name, description, price, tags, imageUrl, ow
 export const getProductById = async (id) => {
   const product = await prisma.product.findUnique({
     where: { id },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      tags: true,
-      createdAt: true,
+    include: {
+      owner: { select: { id: true, nickname: true, image: true } },
+      comments: {
+        select: { id: true, content: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+      },
     },
   });
 
   return product;
+};
+
+export const getMyLike = async (userId, productId) => {
+  return await prisma.productLike.findUnique({
+    where: { userId_productId: { userId, productId } },
+  });
 };
 
 // 상품 수정
