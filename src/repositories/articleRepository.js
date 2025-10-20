@@ -26,7 +26,14 @@ export const getArticleCount = async (whereCondition) => {
 export const getArticleById = async (id) => {
   return await prisma.article.findUnique({
     where: { id },
-    select: { id: true, title: true, content: true, likeCount: true, createdAt: true },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likeCount: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 };
 
