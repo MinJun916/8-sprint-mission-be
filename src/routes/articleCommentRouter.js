@@ -4,14 +4,21 @@ import * as articleCommentControllers from '../controllers/articleCommentControl
 import * as commentValidator from '../middlewares/validate/commentValidator.js';
 import { handleValidation } from '../middlewares/validate/index.js';
 import { verifyArticleCommentOwner } from '../middlewares/ownership.js';
-import { articleIdValidator } from '../middlewares/validate/articleValidator.js';
+import { commentArticleIdValidator } from '../middlewares/validate/articleValidator.js';
 
 const router = Router();
+
+router.get(
+  '/:articleId',
+  commentArticleIdValidator,
+  handleValidation,
+  articleCommentControllers.getArticleCommentById,
+);
 
 router.post(
   '/:articleId',
   passport.authenticate('access-token', { session: false }),
-  articleIdValidator,
+  commentArticleIdValidator,
   handleValidation,
   commentValidator.createCommentValidator,
   handleValidation,

@@ -11,3 +11,7 @@ export const updateArticleValidator = [
 ];
 
 export const articleIdValidator = [param('id').isUUID().withMessage('Invalid article ID')];
+
+export const commentArticleIdValidator = [
+  param('articleId').isUUID().withMessage('Invalid article ID'),
+];
