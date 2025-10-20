@@ -22,3 +22,16 @@ export const updateUserRefreshToken = async (userId, refreshToken) => {
     data: { refreshToken },
   });
 };
+
+export const findUserByRefreshToken = async (refreshToken) => {
+  return await prisma.user.findFirst({
+    where: { refreshToken },
+  });
+};
+
+export const clearUserRefreshToken = async (userId) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { refreshToken: null },
+  });
+};

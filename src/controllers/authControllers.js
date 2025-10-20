@@ -5,6 +5,8 @@ import {
   findUserByEmail,
   findUserById,
   updateUserRefreshToken,
+  findUserByRefreshToken,
+  clearUserRefreshToken,
 } from '../repositories/userRepository.js';
 import { verifyUser } from '../services/authService.js';
 import { createAccessToken, createRefreshToken } from '../utils/token.js';
@@ -69,6 +71,41 @@ export const signin = async (req, res, next) => {
   }
 };
 
+export const signout = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+
+    // 쿠키가 없어도 멱등하게 동작하도록 처리
+    if (!refreshToken) {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/auth/refresh',
+      });
+      return res.status(204).json({ success: true });
+    }
+
+    // 해당 리프레시 토큰을 가진 사용자를 찾고, 저장된 토큰을 무효화
+    const user = await findUserByRefreshToken(refreshToken);
+    if (user) {
+      await clearUserRefreshToken(user.id);
+    }
+
+    // 클라이언트 쿠키 삭제
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/auth/refresh',
+    });
+
+    return res.status(204).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
@@ -110,6 +147,15 @@ export const refreshToken = async (req, res, next) => {
       success: true,
       data: { accessToken: newAccessToken },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const me = async (req, res, next) => {
+  try {
+    const user = req.user;
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
     next(error);
   }
