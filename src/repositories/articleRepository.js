@@ -1,8 +1,8 @@
 import prisma from '../middlewares/prisma.js';
 
-export const createArticle = async (title, content) => {
+export const createArticle = async (title, content, ownerId) => {
   return await prisma.article.create({
-    data: { title, content },
+    data: { title, content, ownerId },
     select: { id: true, title: true, content: true, likeCount: true, createdAt: true },
   });
 };
