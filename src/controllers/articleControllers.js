@@ -4,7 +4,8 @@ export const createArticle = async (req, res, next) => {
   try {
     const { title, content } = req.body;
 
-    const article = await articleRepository.createArticle(title, content);
+    const ownerId = req.user?.id;
+    const article = await articleRepository.createArticle(title, content, ownerId);
 
     res.status(201).json({ success: true, data: article });
   } catch (error) {
