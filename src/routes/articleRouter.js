@@ -20,7 +20,13 @@ const router = Router();
 
 router.get('/', getArticle);
 
-router.get('/:id', getArticleById);
+router.get(
+  '/:id',
+  passport.authenticate('access-token', { session: false }),
+  articleIdValidator,
+  handleValidation,
+  getArticleById,
+);
 
 router.post(
   '/',
