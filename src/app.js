@@ -17,13 +17,28 @@ import articleCommentRouter from './routes/articleCommentRouter.js';
 import authRouter from './routes/authRouter.js';
 
 const app = express();
+const allowedOrigins = ['http://localhost:3000', 'https://codeit-sprint-mission.vercel.app'];
 
 // Render 프록시 신뢰
 app.set('trust proxy', 1);
 
 // 미들웨어 설정
 app.use(helmet());
-app.use(cors());
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(passport.initialize());
 
