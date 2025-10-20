@@ -1,5 +1,12 @@
 import prisma from '../middlewares/prisma.js';
 
+export const getCommentByArticleId = async (articleId) => {
+  return await prisma.articleComment.findMany({
+    where: { articleId },
+    select: { id: true, content: true, createdAt: true, updatedAt: true },
+  });
+};
+
 export const createCommentByProduct = async (productId, content, ownerId) => {
   return await prisma.productComment.create({
     data: { productId, content, ownerId },

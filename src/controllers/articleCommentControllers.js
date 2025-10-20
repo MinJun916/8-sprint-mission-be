@@ -1,5 +1,15 @@
 import * as commentRepository from '../repositories/commentRepository.js';
 
+export const getArticleCommentById = async (req, res, next) => {
+  try {
+    const { articleId } = req.params;
+    const comment = await commentRepository.getCommentByArticleId(articleId);
+    res.status(200).json({ success: true, data: comment });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createArticleComment = async (req, res, next) => {
   try {
     const { articleId } = req.params;
