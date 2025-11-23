@@ -55,9 +55,9 @@ export const signin = async (req, res, next) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
-      path: '/auth/refresh',
+      path: '/',
     });
 
     const payloadUser = filterSensitiveUserData(user);
