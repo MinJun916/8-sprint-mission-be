@@ -37,6 +37,7 @@ export const getAllProducts = async (page, limit, searchQuery) => {
       description: true,
       price: true,
       tags: true,
+      likeCount: true,
       createdAt: true,
     },
     skip: offset,
