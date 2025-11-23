@@ -4,6 +4,18 @@ import bcrypt from 'bcrypt';
 const seedDB = async () => {
   try {
     console.log('🌱 시드 데이터 생성 시작...');
+    console.log('🗑️  기존 데이터 삭제 중...');
+
+    // 기존 데이터 삭제 (관계 순서에 맞게 역순으로 삭제)
+    await prisma.articleComment.deleteMany();
+    await prisma.productComment.deleteMany();
+    await prisma.articleLike.deleteMany();
+    await prisma.productLike.deleteMany();
+    await prisma.article.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.user.deleteMany();
+
+    console.log('✅ 기존 데이터 삭제 완료');
 
     // 1. 사용자 데이터 생성 (3명 → 30명)
     const hashedPassword = await bcrypt.hash('password123', 10);
@@ -269,6 +281,7 @@ const seedDB = async () => {
       '크리에이터 장비 추천',
       '비즈니스 노트북 추천',
       '학생용 태블릿 추천',
+      '워크스테이션 추천',
     ];
 
     const articleContents = [
@@ -321,6 +334,7 @@ const seedDB = async () => {
       '크리에이터를 위한 장비 추천입니다.',
       '비즈니스용 노트북 추천과 비교 분석입니다.',
       '학생들에게 적합한 태블릿을 추천합니다.',
+      '워크스테이션 구매 가이드와 추천 제품을 소개합니다.',
     ];
 
     const articleData = [];

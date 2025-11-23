@@ -1,7 +1,7 @@
 import prisma from '../middlewares/prisma.js';
 
 // 모든 상품 조회 (페이지네이션 및 검색 포함)
-export const getAllProducts = async (page, limit, searchQuery) => {
+export const getAllProducts = async (page, limit, searchQuery, sort) => {
   const validPage = Math.max(1, page);
   const offset = (validPage - 1) * limit;
 
@@ -25,6 +25,11 @@ export const getAllProducts = async (page, limit, searchQuery) => {
       }
     : {};
 
+  let orderBy = { createdAt: 'desc' };
+
+  if (sort === 'recent') orderBy = { createdAt: 'desc' };
+  if (sort === 'like') orderBy = { likeCount: 'desc' };
+
   const totalCount = await prisma.product.count({
     where: whereCondition,
   });
@@ -42,9 +47,7 @@ export const getAllProducts = async (page, limit, searchQuery) => {
     },
     skip: offset,
     take: limit,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy,
   });
 
   return {

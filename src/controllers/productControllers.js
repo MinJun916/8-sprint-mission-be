@@ -5,8 +5,9 @@ export const getAllProducts = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const searchQuery = req.query.q;
+    const sort = req.query.sort;
 
-    const result = await productRepository.getAllProducts(page, limit, searchQuery);
+    const result = await productRepository.getAllProducts(page, limit, searchQuery, sort);
 
     res.status(200).json({
       success: true,

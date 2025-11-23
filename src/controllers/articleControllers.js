@@ -45,9 +45,8 @@ export const getArticle = async (req, res, next) => {
       : {};
 
     let orderBy = { createdAt: 'desc' };
-
     if (sort === 'recent') orderBy = { createdAt: 'desc' };
-    if (sort === 'like') orderBy = { like: 'desc' };
+    if (sort === 'like') orderBy = { likeCount: 'desc' };
 
     const articles = await articleRepository.getArticles(whereCondition, orderBy, offset, limit);
 
