@@ -13,7 +13,7 @@ import { verifyProductOwner } from '../middlewares/ownership.js';
 import {
   createProductValidator,
   updateProductValidator,
-  productIdValidator,
+  idValidator,
 } from '../middlewares/validate/productValidator.js';
 import { handleValidation } from '../middlewares/validate/index.js';
 const router = Router();
@@ -34,7 +34,7 @@ router.get('/:id', passport.authenticate('access-token', { session: false }), ge
 router.patch(
   '/:id',
   passport.authenticate('access-token', { session: false }),
-  productIdValidator,
+  idValidator,
   handleValidation,
   verifyProductOwner,
   updateProductValidator,
@@ -45,7 +45,7 @@ router.patch(
 router.delete(
   '/:id',
   passport.authenticate('access-token', { session: false }),
-  productIdValidator,
+  idValidator,
   handleValidation,
   verifyProductOwner,
   deleteProduct,
