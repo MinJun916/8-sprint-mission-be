@@ -26,7 +26,7 @@ export const getCommentByArticle = async (req, res, next) => {
       }
     }
 
-    const comments = await prisma.comment.findMany({
+    const comments = await prisma.articleComment.findMany({
       where: whereCondition,
       take: validLimit + 1, // 한 개 더 가져와서 hasNextPage 확인
       orderBy,
@@ -94,7 +94,7 @@ export const getCommentByProduct = async (req, res, next) => {
       }
     }
 
-    const comments = await prisma.comment.findMany({
+    const comments = await prisma.productComment.findMany({
       where: whereCondition,
       take: validLimit + 1, // 한 개 더 가져와서 hasNextPage 확인
       orderBy,
