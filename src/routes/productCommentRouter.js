@@ -9,7 +9,7 @@ import { verifyProductCommentOwner } from '../middlewares/ownership.js';
 
 const router = Router();
 
-router.get('/:id', commentValidator.commentIdValidator, handleValidation, getCommentByProduct);
+router.get('/:productId', productIdValidator, handleValidation, getCommentByProduct);
 
 router.post(
   '/:productId',

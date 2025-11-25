@@ -73,7 +73,7 @@ export const getCommentByArticle = async (req, res, next) => {
 
 export const getCommentByProduct = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { productId: id } = req.params;
     const cursor = req.query.cursor;
     const limit = parseInt(req.query.limit) || 10;
     const direction = req.query.direction || 'next'; // 'next' or 'prev'
