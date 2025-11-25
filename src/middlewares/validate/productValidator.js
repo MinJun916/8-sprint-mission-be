@@ -15,3 +15,5 @@ export const updateProductValidator = [
 ];
 
 export const productIdValidator = [param('productId').isUUID().withMessage('Invalid product ID')];
+
+export const idValidator = [param('id').isUUID().withMessage('Invalid product ID')];
