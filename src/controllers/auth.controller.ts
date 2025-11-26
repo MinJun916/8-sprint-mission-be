@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express';
+import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { SigninSchemaType, SignupSchemaType } from '../validators/auth.validator';
 import { signinService, signupService } from '../services/auth.service';

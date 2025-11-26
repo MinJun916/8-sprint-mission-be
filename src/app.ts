@@ -6,9 +6,11 @@ import morgan from 'morgan';
 import { errorMiddleware } from './middlewares/error.middleware';
 import swaggerUi from 'swagger-ui-express';
 import { specs, swaggerUiOptions } from './config/swagger';
+import cookieParser from 'cookie-parser';
 
 // Router import
 import authRouter from './routes/auth.route';
+import tokenRouter from './routes/token.route';
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.set('trust proxy', 1);
 // Middleware Setup
 app.use(helmet());
 app.use(cors);
+app.use(cookieParser());
 
 // TODO: passport 추가
 app.use(express.json());
@@ -25,6 +28,7 @@ app.use(morgan('combined'));
 
 // Routes
 app.use('/auth', authRouter);
+app.use('/token', tokenRouter);
 
 // Swagger Setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
