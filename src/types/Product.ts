@@ -8,3 +8,5 @@ interface ProductOrderByWithRelationInput {
   createdAt?: 'asc' | 'desc';
   likeCount?: 'asc' | 'desc';
 }
+
+export type { ProductWhereCondition, ProductOrderByWithRelationInput };
