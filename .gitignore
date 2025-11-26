@@ -85,3 +85,5 @@ out
 # Vercel (if used)
 .vercel
 
+
+/src/generated/prisma
