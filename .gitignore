@@ -49,6 +49,7 @@ Thumbs.db
 # Note: prisma/migrations/ should be committed
 # But generated client can be regenerated
 prisma/migrations/.migration_lock.toml
+src/generated
 
 # Testing
 coverage/
@@ -85,5 +86,3 @@ out
 # Vercel (if used)
 .vercel
 
-
-/src/generated/prisma
