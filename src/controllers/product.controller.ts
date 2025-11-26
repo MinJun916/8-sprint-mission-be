@@ -1,7 +1,11 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
 import { getProductsQuerySchema } from '../validators/product.validator';
-import { getAllProductsService, createProductService } from '../services/product.service';
+import {
+  getAllProductsService,
+  createProductService,
+  getProductByIdService,
+} from '../services/product.service';
 import HTTP_STATUS from '../constants/http.constant';
 
 export const getAllProductsController = asyncHandler(async (req: Request, res: Response) => {
@@ -56,6 +60,21 @@ export const createProductController = asyncHandler(async (req: Request, res: Re
   res.status(HTTP_STATUS.CREATED).json({
     success: true,
     message: '상품 생성 성공',
+    data: {
+      product,
+    },
+  });
+});
+
+export const getProductByIdController = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const ownerId = req.auth?.userId || '';
+
+  const product = await getProductByIdService(id, ownerId);
+
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: '상품 상세 조회 성공',
     data: {
       product,
     },

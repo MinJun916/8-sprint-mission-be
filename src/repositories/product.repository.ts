@@ -54,3 +54,25 @@ export const createProductRepository = async (
     },
   });
 };
+
+export const getProductByIdRepository = async (id: string) => {
+  return prisma.product.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      tags: true,
+      likeCount: true,
+      createdAt: true,
+      updatedAt: true,
+      owner: {
+        select: {
+          id: true,
+          nickname: true,
+        },
+      },
+    },
+  });
+};

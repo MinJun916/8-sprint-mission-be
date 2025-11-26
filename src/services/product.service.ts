@@ -1,10 +1,14 @@
 import {
   createProductRepository,
   getAllProductsRepository,
+  getProductByIdRepository,
   getProductsCountRepository,
 } from '../repositories/product.repository';
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '../generated/models';
 import { CreateProductSchema } from '../validators/product.validator';
+import AppError from '../utils/AppError';
+import HTTP_STATUS from '../constants/http.constant';
+import { getMyLikeProductRepository } from '../repositories/like.repository';
 
 export const getAllProductsService = async (
   page: number,
@@ -70,4 +74,19 @@ export const createProductService = async ({
   ownerId,
 }: CreateProductServiceParams) => {
   return await createProductRepository(name, description, price, tags, ownerId);
+};
+
+export const getProductByIdService = async (id: string, ownerId: string) => {
+  const product = await getProductByIdRepository(id);
+  if (!product) {
+    throw new AppError('존재하지 않는 상품입니다.', HTTP_STATUS.NOT_FOUND);
+  }
+
+  const getMyLikeProduct = await getMyLikeProductRepository(ownerId, id);
+  const isLiked = !!getMyLikeProduct;
+
+  return {
+    ...product,
+    isLiked,
+  };
 };
