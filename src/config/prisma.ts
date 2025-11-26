@@ -1,24 +1,22 @@
-import { Prisma, PrismaClient } from '../generated/client';
+import 'dotenv/config';
+import { PrismaClient } from '../generated/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-// Prisma 7의 타입 정의 이슈:
-// PrismaClientOptions가 union 타입 ({ adapter } | { accelerateUrl }) & { ... }로 정의되어 있어서
-// TypeScript가 adapter 또는 accelerateUrl 중 하나를 필수로 요구합니다.
-// 하지만 실제로는 둘 다 선택사항이며, 공식 문서 예제도 new PrismaClient()로 인자 없이 호출합니다.
-//
-// 해결 방법:
-// 1. 타입 단언 사용 (현재 방법)
-// 2. 명시적으로 옵션 전달 (예: log 옵션 등)
-// 3. Prisma 팀이 타입 정의를 수정할 때까지 대기
+/**
+ * Prisma v7 변경점으로 인한 설정
+ *
+ * Prisma v7에서는 기본적으로 driver adapter를 사용해야 합니다.
+ * `new PrismaClient()`만으로는 "Using engine type 'client' requires either 'adapter' or 'accelerateUrl'"
+ * 에러가 발생하므로, PostgreSQL의 경우 `@prisma/adapter-pg`를 사용하여 adapter를 전달해야 합니다.
+ *
+ * 참고: https://www.prisma.io/docs/orm/overview/databases/postgresql#using-the-node-postgres-driver
+ */
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
 
-// Prisma 7의 타입 정의 버그:
-// PrismaClientOptions가 union 타입으로 정의되어 있어서 TypeScript가
-// adapter 또는 accelerateUrl 중 하나를 필수로 요구합니다.
-// 하지만 실제로는 둘 다 선택사항이며, 공식 문서도 new PrismaClient()를 권장합니다.
-//
-// 참고: https://github.com/prisma/prisma/issues
-
-const prisma = new PrismaClient({
-  log: ['error'],
-} as any);
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 export default prisma;

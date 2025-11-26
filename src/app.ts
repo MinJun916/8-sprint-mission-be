@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import { specs, swaggerUiOptions } from './config/swagger';
 
 // Router import
-// TODO
+import authRouter from './routes/auth.route';
 
 const app = express();
 
@@ -18,12 +18,13 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors);
 
+// TODO: passport 추가
 app.use(express.json());
 // app.use(passport.initialize());
 app.use(morgan('combined'));
 
 // Routes
-// TODO
+app.use('/auth', authRouter);
 
 // Swagger Setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
