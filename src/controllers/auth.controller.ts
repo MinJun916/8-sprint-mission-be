@@ -8,7 +8,7 @@ import { findUserById } from '../repositories/auth.repository';
 import { filterSensitiveData } from '../utils/filter';
 
 export const signupController = asyncHandler(
-  async (req: Request<{}, {}, Omit<SignupSchemaType, 'passwordConfirm'>>, res: Response) => {
+  async (req: Request<{}, {}, SignupSchemaType>, res: Response) => {
     const { email, nickname, password } = req.body;
     const { user, accessToken, refreshToken } = await signupService(email, nickname, password);
 
