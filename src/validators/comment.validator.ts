@@ -12,4 +12,12 @@ export const getCommentCursorQuerySchema = z.object({
     }),
 });
 
+export const commentBodySchema = z.object({
+  content: z
+    .string()
+    .min(1, '댓글 내용은 필수 입력 필드입니다.')
+    .max(1000, '댓글 내용은 최대 1000자 이하여야 합니다.'),
+});
+
 export type GetCommentCursorQuerySchema = z.infer<typeof getCommentCursorQuerySchema>;
+export type CommentBodySchema = z.infer<typeof commentBodySchema>;

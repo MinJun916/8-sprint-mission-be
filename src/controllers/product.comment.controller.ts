@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { getCommentCursorQuerySchema } from '../validators/comment.validator';
-import { getProductCommentService } from '../services/product.comment.service';
+import {
+  createProductCommentService,
+  getProductCommentService,
+  updateProductCommentService,
+} from '../services/product.comment.service';
 import HTTP_STATUS from '../constants/http.constant';
 
 export const getProductCommentController = asyncHandler(async (req: Request, res: Response) => {
@@ -23,6 +27,45 @@ export const getProductCommentController = asyncHandler(async (req: Request, res
     pagination: {
       nextCursor,
       hasNextPage,
+    },
+  });
+});
+
+export const createProductCommentController = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { content } = req.body;
+  const ownerId = req.auth?.userId;
+
+  if (!ownerId) {
+    res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      success: false,
+      message: '인증되지 않은 접근입니다.',
+    });
+    return;
+  }
+
+  const comment = await createProductCommentService({ content, productId: id, ownerId });
+
+  res.status(HTTP_STATUS.CREATED).json({
+    success: true,
+    message: '상품 댓글 생성 성공',
+    data: {
+      comment,
+    },
+  });
+});
+
+export const updateProductCommentController = asyncHandler(async (req: Request, res: Response) => {
+  const { commentId } = req.params;
+  const { content } = req.body;
+
+  const comment = await updateProductCommentService({ content, commentId });
+
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: '상품 댓글 수정 성공',
+    data: {
+      comment,
     },
   });
 });

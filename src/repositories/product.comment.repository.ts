@@ -1,4 +1,5 @@
 import prisma from '../config/prisma';
+import { createCommentHelper, updateCommentHelper } from '../helpers/comment.helper';
 
 export const getProductCommentRepository = async ({
   take,
@@ -18,4 +19,26 @@ export const getProductCommentRepository = async ({
       createdAt: 'desc',
     },
   });
+};
+
+export const createProductCommentRepository = async ({
+  content,
+  productId,
+  ownerId,
+}: {
+  content: string;
+  productId: string;
+  ownerId: string;
+}) => {
+  return await createCommentHelper({ content, productId, ownerId });
+};
+
+export const updateProductCommentRepository = async ({
+  commentId,
+  content,
+}: {
+  commentId: string;
+  content: string;
+}) => {
+  return await updateCommentHelper({ content, commentId, type: 'product' });
 };

@@ -1,4 +1,8 @@
-import { getProductCommentRepository } from '../repositories/product.comment.repository';
+import {
+  createProductCommentRepository,
+  getProductCommentRepository,
+  updateProductCommentRepository,
+} from '../repositories/product.comment.repository';
 
 export const getProductCommentService = async ({
   cursor,
@@ -26,4 +30,26 @@ export const getProductCommentService = async ({
     nextCursor,
     hasNextPage: nextCursor !== null,
   };
+};
+
+export const createProductCommentService = async ({
+  content,
+  productId,
+  ownerId,
+}: {
+  content: string;
+  productId: string;
+  ownerId: string;
+}) => {
+  return await createProductCommentRepository({ content, productId, ownerId });
+};
+
+export const updateProductCommentService = async ({
+  content,
+  commentId,
+}: {
+  content: string;
+  commentId: string;
+}) => {
+  return await updateProductCommentRepository({ content, commentId });
 };
