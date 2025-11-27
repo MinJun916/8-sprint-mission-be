@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { getCommentCursorQuerySchema } from '../validators/comment.validator';
 import {
   createProductCommentService,
+  deleteProductCommentService,
   getProductCommentService,
   updateProductCommentService,
 } from '../services/product.comment.service';
@@ -64,6 +65,20 @@ export const updateProductCommentController = asyncHandler(async (req: Request, 
   res.status(HTTP_STATUS.OK).json({
     success: true,
     message: '상품 댓글 수정 성공',
+    data: {
+      comment,
+    },
+  });
+});
+
+export const deleteProductCommentController = asyncHandler(async (req: Request, res: Response) => {
+  const { commentId } = req.params;
+
+  const comment = await deleteProductCommentService({ commentId });
+
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: '상품 댓글 삭제 성공',
     data: {
       comment,
     },

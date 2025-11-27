@@ -4,6 +4,7 @@ import { validateBody, validateParams } from '../middlewares/validator.middlewar
 import { idSchema } from '../validators/id.validator';
 import {
   createProductCommentController,
+  deleteProductCommentController,
   getProductCommentController,
   updateProductCommentController,
 } from '../controllers/product.comment.controller';
@@ -27,6 +28,13 @@ router.patch(
   validateParams(idSchema),
   validateBody(commentBodySchema),
   updateProductCommentController,
+);
+
+router.delete(
+  '/:commentId',
+  verifyAccessToken,
+  validateParams(idSchema),
+  deleteProductCommentController,
 );
 
 export default router;

@@ -1,5 +1,6 @@
 import {
   createProductCommentRepository,
+  deleteProductCommentRepository,
   getProductCommentRepository,
   updateProductCommentRepository,
 } from '../repositories/product.comment.repository';
@@ -52,4 +53,8 @@ export const updateProductCommentService = async ({
   commentId: string;
 }) => {
   return await updateProductCommentRepository({ content, commentId });
+};
+
+export const deleteProductCommentService = async ({ commentId }: { commentId: string }) => {
+  return await deleteProductCommentRepository({ commentId });
 };

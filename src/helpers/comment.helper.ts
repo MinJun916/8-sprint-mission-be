@@ -117,3 +117,41 @@ export const updateCommentHelper = async ({
 
   return;
 };
+
+export const deleteCommentHelper = async ({
+  type = 'product',
+  commentId,
+}: {
+  type: 'product' | 'article';
+  commentId: string;
+}) => {
+  if (!type || (type !== 'product' && type !== 'article')) {
+    throw new AppError('올바르지 않은 댓글 타입입니다.', HTTP_STATUS.BAD_REQUEST);
+  }
+
+  if (type === 'product') {
+    return prisma.productComment.delete({
+      where: { id: commentId },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  if (type === 'article') {
+    return prisma.articleComment.delete({
+      where: { id: commentId },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  return;
+};
