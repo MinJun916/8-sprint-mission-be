@@ -5,7 +5,7 @@ export const getAllArticlesRepository = async (
   cursor: string | undefined,
   limit: number,
   whereCondition: ArticleWhereInput,
-  orderBy: ArticleOrderByWithRelationInput,
+  orderBy: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[],
 ) => {
   const cursorCondition = cursor
     ? {

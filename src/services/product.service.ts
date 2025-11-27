@@ -44,8 +44,10 @@ export const getAllProductsService = async (
       }
     : {};
 
-  const orderBy: ProductOrderByWithRelationInput =
-    sort === 'recent' ? { createdAt: 'desc' } : { likeCount: 'desc' };
+  // likeCount로 정렬할 때는 secondary sort로 createdAt을 추가하여 일관된 순서 보장
+  // 같은 likeCount를 가진 상품들도 일관된 순서로 정렬되어 중복 방지
+  const orderBy: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[] =
+    sort === 'recent' ? { createdAt: 'desc' } : [{ likeCount: 'desc' }, { createdAt: 'desc' }];
 
   const products = await getAllProductsRepository(page, limit, whereCondition, orderBy);
   const totalCount = await getProductsCountRepository(whereCondition);

@@ -5,7 +5,7 @@ export const getAllProductsRepository = async (
   page: number,
   limit: number,
   whereCondition: ProductWhereInput,
-  orderBy: ProductOrderByWithRelationInput,
+  orderBy: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[],
 ) => {
   return prisma.product.findMany({
     where: whereCondition,

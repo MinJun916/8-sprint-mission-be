@@ -36,15 +36,18 @@ export const getAllArticlesService = async (
       }
     : {};
 
-  const orderBy: ArticleOrderByWithRelationInput =
-    sort === 'recent' ? { createdAt: 'desc' } : { likeCount: 'desc' };
+  // likeCount로 정렬할 때는 secondary sort로 createdAt을 추가하여 일관된 순서 보장
+  // 같은 likeCount를 가진 게시글들도 일관된 순서로 정렬되어 중복 방지
+  const orderBy: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[] =
+    sort === 'recent' ? { createdAt: 'desc' } : [{ likeCount: 'desc' }, { createdAt: 'desc' }];
 
   const articles = await getAllArticlesRepository(cursor, limit, whereCondition, orderBy);
 
   // hasNextPage 확인: limit + 1개를 가져왔으므로, 실제로 limit보다 많으면 다음 페이지가 있음
   const hasNextPage = articles.length > limit;
   const resultArticles = hasNextPage ? articles.slice(0, limit) : articles;
-  const nextCursor = hasNextPage && resultArticles.length > 0 ? resultArticles[resultArticles.length - 1].id : null;
+  const nextCursor =
+    hasNextPage && resultArticles.length > 0 ? resultArticles[resultArticles.length - 1].id : null;
 
   return {
     articles: resultArticles,
