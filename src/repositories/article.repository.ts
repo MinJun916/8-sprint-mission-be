@@ -18,6 +18,12 @@ export const getAllArticlesRepository = async (
       content: true,
       likeCount: true,
       createdAt: true,
+      owner: {
+        select: {
+          id: true,
+          nickname: true,
+        },
+      },
     },
   });
 };
@@ -54,6 +60,12 @@ export const getArticleByIdRepository = async (id: string) => {
       content: true,
       likeCount: true,
       createdAt: true,
+      owner: {
+        select: {
+          id: true,
+          nickname: true,
+        },
+      },
     },
   });
 };
