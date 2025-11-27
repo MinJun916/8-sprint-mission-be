@@ -12,9 +12,10 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.route';
 import tokenRouter from './routes/token.route';
 import productRouter from './routes/product.route';
-import productLikeRouter from './routes/like.product.route';
+import productLikeRouter from './routes/product.like.route';
+import productCommentRouter from './routes/product.comment.route';
 import articleRouter from './routes/article.route';
-import articleLikeRouter from './routes/like.article.route';
+import articleLikeRouter from './routes/article.like.route';
 
 const app = express();
 
@@ -33,9 +34,9 @@ app.use('/auth', authRouter);
 app.use('/token', tokenRouter);
 app.use('/products', productRouter);
 app.use('/products', productLikeRouter);
+app.use('/product-comments', productCommentRouter);
 app.use('/articles', articleRouter);
 app.use('/articles', articleLikeRouter);
-// TODO: Comment Router 추가
 
 // Swagger Setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
