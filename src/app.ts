@@ -17,6 +17,7 @@ import productCommentRouter from './routes/product.comment.route';
 import articleRouter from './routes/article.route';
 import articleLikeRouter from './routes/article.like.route';
 import articleCommentRouter from './routes/article.comment.route';
+import awsRouter from './routes/aws.route';
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/product-comments', productCommentRouter);
 app.use('/articles', articleRouter);
 app.use('/articles', articleLikeRouter);
 app.use('/article-comments', articleCommentRouter);
+app.use('/aws', awsRouter);
 
 // Swagger Setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));

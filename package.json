@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/MinJun916/8-sprint-mission-be#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.940.0",
+    "@aws-sdk/s3-request-presigner": "^3.940.0",
     "@prisma/adapter-pg": "^7.0.1",
     "@prisma/client": "^7.0.1",
     "argon2": "^0.44.0",
