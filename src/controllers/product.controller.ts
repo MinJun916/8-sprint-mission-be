@@ -46,7 +46,7 @@ export const getAllProductsController = asyncHandler(async (req: Request, res: R
 });
 
 export const createProductController = asyncHandler(async (req: Request, res: Response) => {
-  const { name, description, price, tags } = req.body;
+  const { name, description, price, tags, imageUrl } = req.body;
   const ownerId = req.auth?.userId;
 
   if (!ownerId) {
@@ -57,7 +57,7 @@ export const createProductController = asyncHandler(async (req: Request, res: Re
     return;
   }
 
-  const product = await createProductService({ name, description, price, tags, ownerId });
+  const product = await createProductService({ name, description, price, tags, ownerId, imageUrl });
 
   res.status(HTTP_STATUS.CREATED).json({
     success: true,

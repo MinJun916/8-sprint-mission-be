@@ -68,6 +68,7 @@ export const getAllProductsService = async (
 
 interface CreateProductServiceParams extends ProductSchema {
   ownerId: string;
+  imageUrl: string;
 }
 
 export const createProductService = async ({
@@ -76,8 +77,9 @@ export const createProductService = async ({
   price,
   tags = [],
   ownerId,
+  imageUrl,
 }: CreateProductServiceParams) => {
-  return await createProductRepository(name, description, price, tags, ownerId);
+  return await createProductRepository(name, description, price, tags, ownerId, imageUrl);
 };
 
 export const getProductByIdService = async (id: string, ownerId: string) => {

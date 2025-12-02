@@ -43,6 +43,7 @@ export const createProductRepository = async (
   price: number,
   tags: string[],
   ownerId: string,
+  imageUrl: string,
 ) => {
   return prisma.product.create({
     data: {
@@ -51,6 +52,7 @@ export const createProductRepository = async (
       price,
       tags,
       ownerId,
+      image: imageUrl,
     },
     select: {
       id: true,
@@ -58,6 +60,7 @@ export const createProductRepository = async (
       description: true,
       price: true,
       tags: true,
+      image: true,
       likeCount: true,
       createdAt: true,
     },
