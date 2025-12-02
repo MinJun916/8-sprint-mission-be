@@ -1,4 +1,19 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import 'dotenv/config';
+
+// 환경 변수에서 서버 URL을 가져오거나 기본값 사용
+const getServerUrl = () => {
+  // 프로덕션 환경 변수가 설정되어 있으면 사용
+  if (process.env.API_BASE_URL) {
+    return process.env.API_BASE_URL;
+  }
+  // 개발 환경에서는 localhost 사용
+  return `http://localhost:${process.env.PORT || 3000}`;
+};
+
+const getServerDescription = () => {
+  return process.env.API_BASE_URL ? 'Production Server' : 'Development Server';
+};
 
 const swaggerOptions = {
   definition: {
@@ -14,8 +29,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 3000}`,
-        description: 'Development Server',
+        url: getServerUrl(),
+        description: getServerDescription(),
       },
     ],
   },
